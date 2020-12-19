@@ -1,14 +1,11 @@
-console.time('run')
+import adventOfCode from '../base.js'
 
-const fs = require('fs')
-const demo = true
+adventOfCode.isDemo = false
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
+adventOfCode.callback = input => {
+  let answer = false
 
-    const input = data.trim().split('\n').filter(value => value)
+  console.log(answer)
+}
 
-
-
-    console.timeEnd('run')
-})
+adventOfCode.run()
