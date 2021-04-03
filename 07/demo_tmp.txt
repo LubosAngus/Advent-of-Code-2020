@@ -1,0 +1,8 @@
+do bags contain 1 bw bag.
+sg bags contain 1 do bag, 2 vp bags.
+# do bags contain 1 bw bag.
+# vp bags contain 5 faded blue bags.
+bw bags contain no other bags.
+vp bags contain no other bags.
+# faded blue bags contain no other bags.
+# dotted black bags contain no other bags.

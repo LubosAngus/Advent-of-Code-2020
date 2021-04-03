@@ -1,30 +1,34 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
 
-String.prototype.includesAll = function (search) {
-    'use strict';
+    this.required = ['byr:','iyr:','eyr:','hgt:','hcl:','ecl:','pid:']
+  }
 
-    for (let i = 0; i < search.length; i++) {
-        if (!this.includes(search[i])) return false
+  parseInput(data) {
+    return data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
+  }
+
+  validate(passport) {
+    for (let i = 0; i < this.required.length; i++) {
+      if (!passport.includes(this.required[i])) return false
     }
 
     return true
-}
+  }
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
+  callback() {
+    let answer = 0
 
-    const input = data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
-    const required = ['byr:','iyr:','eyr:','hgt:','hcl:','ecl:','pid:']
-
-    let result = 0
-
-    input.forEach(passport => {
-        if (passport.includesAll(required)) result++
+    this.input.forEach(passport => {
+        if (this.validate(passport)) answer++
     })
 
-    console.log(result);
-    console.timeEnd('run')
-})
+    return answer
+  }
+}
+
+new AdventOfCode('input').run()

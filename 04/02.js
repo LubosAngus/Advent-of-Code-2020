@@ -1,92 +1,112 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class Validator
+{
+  constructor (passport) {
+    this.passport = passport
+    this.passportFields = this.passport.split(' ').filter(v => v)
+    this.required = ['byr:','iyr:','eyr:','hgt:','hcl:','ecl:','pid:']
+  }
 
-String.prototype.includesAll = function (search) {
-    'use strict';
+  validate() {
+    if (!this.checkRequiredFields(this.passport)) return false
 
-    for (let i = 0; i < search.length; i++) {
-        if (!this.includes(search[i])) return false
+    for (const fieldRaw of this.passportFields) {
+      const field = fieldRaw.split(':')
+      const name = field[0]
+      const value = field[1]
+
+      if (typeof this[name] === 'function' && !this[name](value)) {
+        return false
+      }
     }
 
     return true
-}
+  }
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
-
-    const input = data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
-    const validator = {
-        minMax: (value, min, max) => {
-            let result = false
-
-            value = parseInt(value)
-
-            if (value >= min && value <= max) {
-                result = true
-            }
-
-            return result
-        },
-        'byr': (value) => {
-            return validator.minMax(value, 1920, 2002)
-        },
-        'iyr': (value) => {
-            return validator.minMax(value, 2010, 2020)
-        },
-        'eyr': (value) => {
-            return validator.minMax(value, 2020, 2030)
-        },
-        'hgt': (value) => {
-            const is_cm = value.includes('cm')
-            const is_in = value.includes('in')
-
-            if (!is_cm && !is_in) return false
-
-            value = parseInt(value)
-
-            if (is_cm) {
-                return validator.minMax(value, 150, 193)
-            } else {
-                return validator.minMax(value, 59, 76)
-            }
-        },
-        'hcl': (value) => {
-            return /#[0-9a-f]{6}/.exec(value) !== null
-        },
-        'ecl': (value) => {
-            return ['amb','blu','brn','gry','grn','hzl','oth'].includes(value)
-        },
-        'pid': (value) => {
-            return /^\d{9}$/.exec(value) !== null
-        },
-        'cid': () => true
+  checkRequiredFields() {
+    for (let i = 0; i < this.required.length; i++) {
+      if (!this.passport.includes(this.required[i])) return false
     }
 
-    let result = 0
+    return true
+  }
 
-    input.forEach(passport => {
-        let valid = false
+  // (Birth Year) - four digits; at least 1920 and at most 2002
+  byr(value) {
+    return this.minMax(value, 1920, 2002)
+  }
 
-        if (passport.includesAll(['byr:','iyr:','eyr:','hgt:','hcl:','ecl:','pid:'])) {
-            valid = true
-        }
+  // (Issue Year) - four digits; at least 2010 and at most 2020
+  iyr(value) {
+    return this.minMax(value, 2010, 2020)
+  }
 
-        if (valid) {
-            passport.split(' ').filter(v => v).forEach(values => {
-                const value = values.split(':')
-                const currValidator = validator[value[0]]
+  // (Expiration Year) - four digits; at least 2020 and at most 2030
+  eyr(value) {
+    return this.minMax(value, 2020, 2030)
+  }
 
-                if (valid && !currValidator(value[1])) {
-                    valid = false
-                }
-            })
-        }
+  // (Height) - a number followed by either cm or in:
+  // If cm, the number must be at least 150 and at most 193.
+  // If in, the number must be at least 59 and at most 76.
+  hgt(value) {
+    const is_cm = value.includes('cm')
+    const is_in = value.includes('in')
 
-        if (valid) result++
+    if (!is_cm && !is_in) return false
+
+    if (is_cm) {
+      return this.minMax(value, 150, 193)
+    } else {
+      return this.minMax(value, 59, 76)
+    }
+  }
+
+  // (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+  hcl(value) {
+    return /#[0-9a-f]{6}/.exec(value) !== null
+  }
+
+  // (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+  ecl(value) {
+    return ['amb','blu','brn','gry','grn','hzl','oth'].includes(value)
+  }
+
+  // (Passport ID) - a nine-digit number, including leading zeroes.
+  pid(value) {
+    return /^\d{9}$/.exec(value) !== null
+  }
+
+  minMax(value, min, max) {
+    value = parseInt(value)
+
+    return value >= min && value <= max
+  }
+}
+
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
+  }
+
+  parseInput(data) {
+    return data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
+  }
+
+  callback() {
+    let answer = 0
+
+    this.input.forEach(passport => {
+      const isValid = new Validator(passport).validate()
+
+      if (isValid) answer++
     })
 
-    console.log(result);
-    console.timeEnd('run')
-})
+    return answer
+  }
+}
+
+// new AdventOfCode('demo').run()
+new AdventOfCode('input').run()

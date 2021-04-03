@@ -1,21 +1,26 @@
-import adventOfCode from '../base.js'
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-adventOfCode.isDemo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    this.inputAsInt = true
 
-adventOfCode.callback = input => {
-  let answer = false
+    super(inputFileName)
+  }
 
-  input = input.map(input => parseInt(input))
+  callback() {
+    let result
 
-  input.forEach(first => {
-    input.forEach(second => {
-      if (first + second == 2020) {
-        answer = first * second
-      }
+    this.input.forEach(first => {
+      this.input.forEach(second => {
+        if (first + second == 2020) {
+          result = first * second
+        }
+      })
     })
-  })
 
-  console.log(answer)
+    return result
+  }
 }
 
-adventOfCode.run()
+new AdventOfCode('input').run()

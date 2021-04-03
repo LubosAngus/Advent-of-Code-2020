@@ -1,37 +1,37 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
+  }
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
-
-    let input = data.trim().split('\n').filter(value => value)
+  callback() {
     let answer = 0
+    let j = 0
 
-    j = 0
+    for (let i = 1; i < this.input.length; i++) {
+      const overflow = this.input[i].length
 
-    for (let i = 1; i < input.length; i++) {
-        const overflow = input[i].length
+      j = j + 3
 
-        j = j + 3
+      if (j >= overflow) {
+        j = j - overflow
+      }
 
-        if (j >= overflow) {
-            j = j - overflow
-        }
+      const possibleTree = this.input[i][j]
 
-        const possibleTree = input[i][j]
+      if (possibleTree != '.') {
+        answer++
+      }
 
-        if (possibleTree != '.') {
-            answer++
-        }
-
-        input[i] = input[i].split('')
-        input[i][j] = possibleTree == '.' ? 'O' : 'X'
-        input[i] = input[i].join('')
+      this.input[i] = this.input[i].split('')
+      this.input[i][j] = possibleTree == '.' ? 'O' : 'X'
+      this.input[i] = this.input[i].join('')
     }
 
-    // console.log(input.join('\n'))
-    console.log(answer)
-    console.timeEnd('run')
-})
+    return answer
+  }
+}
+
+new AdventOfCode('input').run()

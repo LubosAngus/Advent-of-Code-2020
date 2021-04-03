@@ -1,16 +1,15 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
+  }
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
-
-    const input = data.trim().split('\n').filter(value => value)
-
+  callback() {
     let validCount = 0
 
-    input.forEach(pass => {
+    this.input.forEach(pass => {
         const matches = /(\d+)-(\d+) (.*): (.*)/gm.exec(pass)
         const min = matches[1]
         const max = matches[2]
@@ -28,6 +27,8 @@ fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
         }
     })
 
-    console.log(validCount)
-    console.timeEnd('run')
-})
+    return validCount
+  }
+}
+
+new AdventOfCode('input').run()
