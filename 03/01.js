@@ -4,10 +4,11 @@ class AdventOfCode extends BaseAdventOfCode
 {
   constructor (inputFileName) {
     super(inputFileName)
+
+    this.answer = 0
   }
 
   callback() {
-    let answer = 0
     let j = 0
 
     for (let i = 1; i < this.input.length; i++) {
@@ -22,7 +23,7 @@ class AdventOfCode extends BaseAdventOfCode
       const possibleTree = this.input[i][j]
 
       if (possibleTree != '.') {
-        answer++
+        this.answer++
       }
 
       this.input[i] = this.input[i].split('')
@@ -30,7 +31,7 @@ class AdventOfCode extends BaseAdventOfCode
       this.input[i] = this.input[i].join('')
     }
 
-    return answer
+    return this.answer
   }
 }
 

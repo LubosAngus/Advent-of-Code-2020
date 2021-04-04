@@ -89,6 +89,8 @@ class AdventOfCode extends BaseAdventOfCode
 {
   constructor (inputFileName) {
     super(inputFileName)
+
+    this.answer = 0
   }
 
   parseInput(data) {
@@ -96,15 +98,13 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   callback() {
-    let answer = 0
-
     this.input.forEach(passport => {
       const isValid = new Validator(passport).validate()
 
-      if (isValid) answer++
+      if (isValid) this.answer++
     })
 
-    return answer
+    return this.answer
   }
 }
 

@@ -6,6 +6,8 @@ class AdventOfCode extends BaseAdventOfCode
     super(inputFileName)
 
     this.seats = [...Array(128)].map(() => [...Array(8).keys()])
+    this.skippedTrailing = false
+    this.answer = false
   }
 
   callback() {
@@ -42,26 +44,23 @@ class AdventOfCode extends BaseAdventOfCode
       delete this.seats[rowsRange[0]][colsRange[0]]
     })
 
-    let skippedTrailing = false
-    let answer = false
-
     for (let i = 0; i < this.seats.length; i++) {
       for (let j = 0; j < this.seats[i].length; j++) {
         const isTaken = typeof this.seats[i][j] === 'undefined'
-        if (isTaken) skippedTrailing = true
+        if (isTaken) this.skippedTrailing = true
 
-        if (skippedTrailing && !isTaken) {
-          answer = i * 8 + j
+        if (this.skippedTrailing && !isTaken) {
+          this.answer = i * 8 + j
 
           break
         }
       }
 
-      if (answer) break
+      if (this.answer) break
     }
 
     console.log(''.padEnd(30,'-'))
-    return answer
+    return this.answer
   }
 }
 

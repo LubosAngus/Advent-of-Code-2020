@@ -1,42 +1,48 @@
-import adventOfCode from '../base.js'
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-adventOfCode.parseInput = (data) => data.trim().split('\n').filter(value => value).map(value => parseInt(value))
-adventOfCode.isDemo = false
-adventOfCode.demoName = 'demo_3'
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
 
-adventOfCode.callback = input => {
-  const firstResult = 373803594
-  const contigousSet = []
-  let answer = false
-
-  for (let i = 0; i < input.length; i++) {
-    let res = 0
-
-    for (let j = i; j < input.length; j++) {
-      res = res + input[j]
-
-      if (res > firstResult) {
-        break
-      }
-
-      if (res === firstResult && i !== j) {
-        for (let k = i; k <= j; k++) {
-          contigousSet.push(input[k])
-        }
-
-        contigousSet.sort()
-        answer = contigousSet[0] + contigousSet[contigousSet.length - 1]
-
-        break
-      }
-    }
-
-    if (answer !== false) {
-      break
-    }
+    this.inputAsInt = true
+    this.firstResult = 373803594
+    this.contigousSet = []
+    this.answer = false
   }
 
-  console.log(answer)
+  callback() {
+    console.log(this.input)
+
+    for (let i = 0; i < this.input.length; i++) {
+      let res = 0
+
+      for (let j = i; j < this.input.length; j++) {
+        res = res + this.input[j]
+
+        if (res > this.firstResult) {
+          break
+        }
+
+        if (res === this.firstResult && i !== j) {
+          for (let k = i; k <= j; k++) {
+            this.contigousSet.push(this.input[k])
+          }
+
+          this.contigousSet.sort()
+          this.answer = this.contigousSet[0] + this.contigousSet[this.contigousSet.length - 1]
+
+          break
+        }
+      }
+
+      if (this.answer !== false) {
+        break
+      }
+    }
+
+    return this.answer
+  }
 }
 
-adventOfCode.run()
+new AdventOfCode('input').run()

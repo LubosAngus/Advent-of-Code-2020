@@ -10,7 +10,7 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   parseInput(data) {
-    let res = data.replace(/ ?bags?|\./g, '').trim().split('\n').filter(value => value)
+    return data.replace(/ ?bags?|\./g, '').trim().split('\n').filter(value => value)
   }
 
   canHold(bag, toHold) {

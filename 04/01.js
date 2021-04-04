@@ -5,6 +5,7 @@ class AdventOfCode extends BaseAdventOfCode
   constructor (inputFileName) {
     super(inputFileName)
 
+    this.answer = 0
     this.required = ['byr:','iyr:','eyr:','hgt:','hcl:','ecl:','pid:']
   }
 
@@ -21,13 +22,11 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   callback() {
-    let answer = 0
-
     this.input.forEach(passport => {
-        if (this.validate(passport)) answer++
+        if (this.validate(passport)) this.answer++
     })
 
-    return answer
+    return this.answer
   }
 }
 

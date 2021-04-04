@@ -4,11 +4,11 @@ class AdventOfCode extends BaseAdventOfCode
 {
   constructor (inputFileName) {
     super(inputFileName)
+
+    this.answer = null
   }
 
   callback() {
-    let result = 0
-
     this.input.forEach(instructions => {
       let rowsRange = [...Array(128).keys()]
       let colsRange = [...Array(8).keys()]
@@ -37,14 +37,14 @@ class AdventOfCode extends BaseAdventOfCode
       }
 
       const id = rowsRange[0] * 8 + colsRange[0]
-      if (id > result) result = id
+      if (id > this.answer) this.answer = id
 
       console.log(`row ${String(rowsRange[0]).padEnd(8, ' ')}col ${String(colsRange[0]).padEnd(8, ' ')}ID ${id}`)
     })
 
     console.log(''.padEnd(30,'-'))
 
-    return result
+    return this.answer
   }
 }
 

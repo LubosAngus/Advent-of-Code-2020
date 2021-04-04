@@ -1,35 +1,33 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
+    this.accumulator = 0
+  }
 
-    const input = data.trim().split('\n').filter(value => value)
-    let run = 0
-    let accumulator = 0
+  callback() {
+    for (let index = 0; index < this.input.length; index++) {
+      const instruction = this.input[index].split(' ')
 
-    for (let index = 0; index < input.length; index++) {
-        const instruction = input[index]
-        const splitted = instruction.split(' ')
+      if (instruction[0] == 'xxx') {
+        break
+      }
 
-        run++
+      this.input[index] = `xxx | ${this.input[index]}`
 
-        if (splitted[0] == 'xxx') {
-            break
-        }
-
-        input[index] = `xxx | ${input[index]}`
-
-        if (splitted[0] == 'acc') {
-            accumulator = eval(`${accumulator}${splitted[1]}`)
-        }
-        else if (splitted[0] == 'jmp') {
-            index = eval(`${index}${splitted[1]}-1`)
-        }
+      if (instruction[0] == 'acc') {
+        this.accumulator = eval(`${this.accumulator}${instruction[1]}`)
+      }
+      else if (instruction[0] == 'jmp') {
+        index = eval(`${index}${instruction[1]}-1`)
+      }
     }
 
-    console.log(accumulator)
-    console.timeEnd('run')
-})
+    return this.accumulator
+  }
+}
+
+new AdventOfCode('input').run()

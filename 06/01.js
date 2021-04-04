@@ -1,29 +1,32 @@
-console.time('run')
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-const fs = require('fs')
-const demo = false
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
 
-fs.readFile(`${demo ? 'demo' : 'input'}.txt`, 'utf8', (err, data) => {
-    if (err) return console.log(err)
+    this.answers = []
+  }
 
-    const input = data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
+  parseInput(data) {
+    return data.trim().replace(/^(.{1,})\n/gm, `$1 `).split('\n').filter(value => value)
+  }
 
-    let answers = []
+  callback() {
+    this.input.forEach((group, groupId) => {
+      this.answers[groupId] = []
 
-    input.forEach((group, groupId) => {
-        answers[groupId] = []
+      group.split(' ').forEach(personAnswers => {
+        for (let i = 0; i < personAnswers.length; i++) {
+          const answer = personAnswers[i]
 
-        group.split(' ').forEach(personAnswers => {
-            for (let i = 0; i < personAnswers.length; i++) {
-                const answer = personAnswers[i]
-
-                if (!answers[groupId].includes(answer)) answers[groupId].push(answer)
-            }
-        })
+          if (!this.answers[groupId].includes(answer)) this.answers[groupId].push(answer)
+        }
+      })
     })
 
-    const result = answers.reduce((prev, curr) => prev + curr.length, 0)
+    return this.answers.reduce((prev, curr) => prev + curr.length, 0)
+  }
+}
 
-    console.log(result)
-    console.timeEnd('run')
-})
+new AdventOfCode('input').run()

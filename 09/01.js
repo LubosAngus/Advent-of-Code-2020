@@ -1,52 +1,51 @@
-import adventOfCode from '../base.js'
+import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 
-adventOfCode.parseInput = (data) => data.trim().split('\n').filter(value => value).map(value => parseInt(value))
-adventOfCode.isDemo = false
-adventOfCode.demoName = 'demo_3'
+class AdventOfCode extends BaseAdventOfCode
+{
+  constructor (inputFileName) {
+    super(inputFileName)
 
-adventOfCode.isValid = (number, toCalc) => {
-  let result = false
+    this.inputAsInt = true
+    this.permable = 25
+    this.answer = false
+  }
 
-  for (let i = 0; i < toCalc.length; i++) {
-    for (let j = 0; j < toCalc.length; j++) {
-      if (i == j) continue
+  isValid(number, toCalc) {
+    let result = false
 
-      if (toCalc[i] + toCalc[j] == number) {
-        result = true
+    for (let i = 0; i < toCalc.length; i++) {
+      for (let j = 0; j < toCalc.length; j++) {
+        if (i == j) continue
+
+        if (toCalc[i] + toCalc[j] == number) {
+          result = true
+
+          break
+        }
+      }
+    }
+
+    return result
+  }
+
+  callback() {
+    for (let index = this.permable; index < this.input.length; index++) {
+      const number = this.input[index];
+      const toCalc = []
+
+      for (let j = 1; j <= this.permable; j++) {
+        toCalc.push(this.input[index - j]);
+      }
+
+      if (!this.isValid(number, toCalc)) {
+        this.answer = number
 
         break
       }
     }
-  }
 
-  return result
+    return this.answer
+  }
 }
 
-adventOfCode.callback = input => {
-  let result = []
-  let answer = false
-  const permable = 25
-
-  for (let index = permable; index < input.length; index++) {
-    const number = input[index];
-    const toCalc = []
-
-    for (let j = 1; j <= permable; j++) {
-      toCalc.push(input[index - j]);
-    }
-
-    const isValid = adventOfCode.isValid(number, toCalc)
-
-    if (!isValid) {
-      answer = number
-
-      break
-    }
-  }
-
-  console.log(answer)
-
-  return answer
-}
-
-adventOfCode.run()
+new AdventOfCode('input').run()

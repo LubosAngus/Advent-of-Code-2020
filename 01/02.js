@@ -3,9 +3,10 @@ import { AdventOfCode as BaseAdventOfCode } from '../AdventOfCode.js'
 class AdventOfCode extends BaseAdventOfCode
 {
   constructor (inputFileName) {
-    this.inputAsInt = true
-
     super(inputFileName)
+
+    this.inputAsInt = true
+    this.answer = null
   }
 
   parseInput(data) {
@@ -13,19 +14,17 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   callback() {
-    let result
-
     this.input.forEach(first => {
       this.input.forEach(second => {
         this.input.forEach(third => {
           if (first + second + third == 2020) {
-            result = first * second * third
+            this.answer = first * second * third
           }
         })
       })
     })
 
-    return result
+    return this.answer
   }
 }
 
