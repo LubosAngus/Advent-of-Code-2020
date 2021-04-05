@@ -60,9 +60,14 @@ const execute = (config) => {
       type: 'confirm',
       name: 'watch',
       message: 'Watch?',
-      initial: true,
+      initial: true
     }
   ])
+
+  if (!config.day || !config.script) {
+    console.error("\x1b[45m Ain't no script to run \x1b[0m\n")
+    return
+  }
 
   execute(config)
 
