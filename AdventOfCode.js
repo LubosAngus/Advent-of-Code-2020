@@ -24,7 +24,7 @@ export class AdventOfCode {
   }
 
   async run() {
-    console.time('Script runtime')
+    let startTime = new Date().getTime();
 
     await fs.readFile(this.file, 'utf8', (err, data) => {
       if (err) return console.log(err)
@@ -34,11 +34,11 @@ export class AdventOfCode {
 
       console.log('\n')
       if (this.result !== null) {
-        console.log(`The result is \x1b[45m${this.result}\x1b[0m`)
+        console.log(`\x1b[36mYour result is: \x1b[0m\x1b[45m${this.result}\x1b[0m`)
       } else {
         console.log(`\x1b[45mProvide an answer!\x1b[0m`)
       }
-      console.timeEnd('Script runtime')
+      console.log(`\x1b[36m\x1b[2m${(new Date().getTime() - startTime) / 1000}s\x1b[0m`);
     })
   }
 }

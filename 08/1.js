@@ -26,6 +26,8 @@ class AdventOfCode extends BaseAdventOfCode
       }
     }
 
+    console.table(this.input);
+
     return this.accumulator
   }
 }

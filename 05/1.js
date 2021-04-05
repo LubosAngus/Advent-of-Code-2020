@@ -13,6 +13,8 @@ class AdventOfCode extends BaseAdventOfCode
       let rowsRange = [...Array(128).keys()]
       let colsRange = [...Array(8).keys()]
 
+      console.log(instructions);
+
       for (let i = 0; i < instructions.length; i++) {
         const rowsHalf = Math.ceil(rowsRange.length / 2)
         const colsHalf = Math.ceil(colsRange.length / 2)
@@ -48,4 +50,4 @@ class AdventOfCode extends BaseAdventOfCode
   }
 }
 
-new AdventOfCode('input').run()
+new AdventOfCode('demo').run()
