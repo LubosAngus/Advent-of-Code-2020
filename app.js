@@ -31,7 +31,7 @@ const askSubmit = (config) => {
       message: `Submit result?`,
       initial: false
     }
-  ]).then((res) => {
+  ], { onCancel: () => process.exit() }).then((res) => {
     if (res.submit) {
       open(`https://adventofcode.com/2020/day/${config.day}?result=${finalResult}`)
 
@@ -69,12 +69,12 @@ const execute = (config) => {
     console.log(infoMsg)
 
     if (error) {
-      console.log(`\x1b[45m error: ${error.message} \x1b[0m\n`)
+      console.log(`\x1b[31mERROR:\n\n${error.message}\x1b[0m\n`)
       return
     }
 
     if (stderr) {
-      console.log(`\x1b[45m stderr: ${stderr} \x1b[0m\n`)
+      console.log(`\x1b[31mSTDERR:\n\n${stderr}\x1b[0m\n`)
       return
     }
 
