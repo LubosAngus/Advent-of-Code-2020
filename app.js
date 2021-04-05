@@ -1,7 +1,11 @@
 import { readdirSync } from 'fs'
 import prompts from 'prompts'
-import { exec } from "child_process"
+import { exec } from 'child_process'
 import watch from 'node-watch'
+import open from 'open'
+
+let askingSubmit = false
+let finalResult = false
 
 const getDays = () => {
   return readdirSync(process.cwd(), { withFileTypes: true })
@@ -17,8 +21,44 @@ const getScriptsInDay = (day) => {
   .sort((a, b) => b.title[0] - a.title[0])
 }
 
+const askSubmit = (config) => {
+  askingSubmit = true
+
+  prompts([
+    {
+      type: 'confirm',
+      name: 'submit',
+      message: `Submit result?`,
+      initial: false
+    }
+  ]).then((res) => {
+    if (res.submit) {
+      open(`https://adventofcode.com/2020/day/${config.day}?result=${finalResult}`)
+
+      console.clear()
+      console.log(`\n\x1b[32mSubmitting day ${config.day} result: \x1b[0m\x1b[45m${finalResult}\x1b[0m\n`)
+
+      if (config.watch) {
+        console.log(`\n\x1b[2m\x1b[32mIf you want to cancel this message,\njust save your file one more time.\x1b[0m\n`)
+      }
+    }
+
+    askingSubmit = false
+  })
+}
+
 const execute = (config) => {
-  const infoMsg = config.watch ? `\n\x1b[46m\x1b[30m\x1b[1m Watching ${config.day}-${config.script.replace('.js', '')} \x1b[0m\n` : ''
+  let infoMsg = ''
+
+  if (config.watch) {
+    infoMsg += `\n\x1b[46m\x1b[30m\x1b[1m Watching ${config.day}-${config.script.replace('.js', '')} \x1b[0m\n`
+  }
+
+  infoMsg += `\x1b[2m\x1b[36mYou can submit result by pressing \x1b[0m\x1b[36m\x1b[1mY\x1b[0m\n`
+
+  if (!askingSubmit) {
+    askSubmit(config)
+  }
 
   console.clear()
   console.log(infoMsg)
@@ -29,16 +69,17 @@ const execute = (config) => {
     console.log(infoMsg)
 
     if (error) {
-      console.log(`\x1b[45m error: ${error.message} \x1b[0m\n`);
-      return;
+      console.log(`\x1b[45m error: ${error.message} \x1b[0m\n`)
+      return
     }
 
     if (stderr) {
-      console.log(`\x1b[45m stderr: ${stderr} \x1b[0m\n`);
-      return;
+      console.log(`\x1b[45m stderr: ${stderr} \x1b[0m\n`)
+      return
     }
 
-    console.log(stdout);
+    console.log(stdout)
+    finalResult = JSON.parse(JSON.stringify(/Your result is: (.*)/m.exec(stdout)[1]).replace(/\\u001b\[0m\\u001b\[45m(.*)\\u001b\[0m/, '$1'))
   })
 }
 
@@ -69,6 +110,7 @@ const execute = (config) => {
     return
   }
 
+  askSubmit(config)
   execute(config)
 
   if (config.watch) {
