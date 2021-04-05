@@ -24,7 +24,7 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   rotateWaypoint(direction, degrees) {
-    let { x, y } = {...this.waypointOffset}
+    let { x, y } = { ...this.waypointOffset }
 
     if (direction == 'R' && degrees != 180) {
       x = -x
