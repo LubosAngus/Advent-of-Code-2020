@@ -70,7 +70,6 @@ class AdventOfCode extends BaseAdventOfCode
     // console.log(this.spokenNumbers)
     // console.log(this.lastSpoken)
 
-    // 44 is too low
     return this.lastSpoken
   }
 }
