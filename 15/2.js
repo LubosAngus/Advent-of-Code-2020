@@ -5,7 +5,8 @@ class AdventOfCode extends BaseAdventOfCode
   constructor (inputFileName) {
     super(inputFileName)
 
-    this.spokenNumbers = {}
+    this.size = 30000000
+    this.spokenNumbers = new Array(this.size)
     this.lastSpoken = null
   }
 
@@ -51,7 +52,7 @@ class AdventOfCode extends BaseAdventOfCode
   }
 
   callback() {
-    for (let turn = 1; turn <= 30000000; turn++) {
+    for (let turn = 1; turn <= this.size; turn++) {
       const current = this.getCurrentNumber(turn)
 
       this.memorizeSpoken(current, turn)
